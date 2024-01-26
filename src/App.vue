@@ -1,12 +1,21 @@
 <script >
+import LoginView from "./components/LoginView.vue"
 
+export default{
+    data(){
+        return{
+            isConnected:false
+        }
+    },
+    components:{LoginView}
+}
 </script>
 
 <template>
-    <router-view></router-view>
-    <div>Hello new change</div>
+    <router-view v-if="isConnected==true"></router-view>
+    <LoginView v-else></LoginView>
 </template>
 
-<style scoped>
+<style src="./styles.css">
 
 </style>
