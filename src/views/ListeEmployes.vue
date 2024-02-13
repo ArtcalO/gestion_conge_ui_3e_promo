@@ -37,7 +37,7 @@
                     </thead>
                     <tbody>
                         <tr
-                            v-for="employe in listeEmployes"
+                            v-for="employe,i in listeEmployes"
                             :key="employe.id"
                             >
                             <td>{{employe.nom}}</td>
@@ -47,14 +47,15 @@
                             <td>{{employe.conge_debut}}</td>
                             <td class="act">
                                 <button
-                                   
+                                    v-if="checkConge(employe)"
+                                    @click="openAddConge(i)"
                                     class="btn-sm btn-primary"
                                 >
                                     <i class="mdi mdi-pencil"></i>
                                     Ajouter Congé
                                 </button>
                                 <button
-                                    
+                                    @click="modifierEmploye(employe,i)"
                                     class="btn-sm btn-primary"
                                 >
                                     <i class="mdi mdi-pencil"></i>
@@ -77,18 +78,26 @@
             @close="close"
             @addEmploye="addEmploye"
         ></ModalAddEmploye>
+        <AddConge v-if="add_conge_shown" @close="close" @addCongeEmitted="addConge"/>
+        <ModifierEmploye v-if="edit_employe_shown" @close="close" :employeProp="employeObj" />
     </section>
 </template>
 <script>
 import ModalAddEmploye from "../components/dialog_add_employe.vue"
+import AddConge from "../components/dialog_add_conge.vue"
+import ModifierEmploye from "../components/modal_edit_employe.vue"
 export default {
     mounted(){
         console.log("Acces au composant ListeEmployes")
     },
-    components:{ModalAddEmploye},
+    components:{ModalAddEmploye,AddConge,ModifierEmploye},
     data(){
         return{
             add_employe_shown:false,
+            add_conge_shown:false,
+            edit_employe_shown:false,
+            retrieved_index:null,
+            employeObj:{},
             listeEmployes:[
                 {
                     id:1,
@@ -124,10 +133,29 @@ export default {
         },
         close(){
             this.add_employe_shown=false
+            this.add_conge_shown=false
+            this.edit_employe_shown=false
         },
         addEmploye(data){
             this.close()
             this.listeEmployes.push(data)
+        },
+        checkConge(employe){
+            return employe.conge_debut == null && employe.conge_fin==null
+        },
+        openAddConge(indice){
+            this.retrieved_index=indice
+            this.add_conge_shown=true
+        },
+        addConge(debut, fin){
+            this.listeEmployes[this.retrieved_index].conge_debut=debut
+            this.listeEmployes[this.retrieved_index].conge_fin=fin
+            this.close()
+        },
+        modifierEmploye(employe, indice){
+            this.retrieved_index=indice
+            this.employeObj=employe
+            this.edit_employe_shown=true
         }
     }
 }
