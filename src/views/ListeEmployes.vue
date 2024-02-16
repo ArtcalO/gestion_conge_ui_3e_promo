@@ -24,7 +24,7 @@
 
         <div class="table-container">
             <div class="table-wrap-body">
-                <table class="table">
+            <!--     <table class="table">
                     <thead>
                         <tr>
                             <th>Nom</th>
@@ -32,6 +32,7 @@
                             <th>Age</th>
                             <th>Genre</th>
                             <th>Status</th>
+                            <th>Jours restant</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -39,12 +40,14 @@
                         <tr
                             v-for="employe,i in listeEmployes"
                             :key="employe.id"
+                            :class="{en_conge:enConge(employe)}"
                             >
                             <td>{{employe.nom}}</td>
                             <td>{{employe.prenom}}</td>
                             <td>{{employe.age}}</td>
                             <td>{{employe.genre}}</td>
-                            <td>{{employe.conge_debut}}</td>
+                            <td>{{checkStatus(employe)}}</td>
+                            <td>{{enConge(employe)?remainingDays(employe.conge_fin)+' Jour(s)':"0 Jour"}}</td>
                             <td class="act">
                                 <button
                                     v-if="checkConge(employe)"
@@ -70,6 +73,26 @@
                             </td>
                         </tr>
                     </tbody>
+                </table> -->
+                <table>
+                <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Igisokozo</th>
+                            <th>Itariki</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr
+                            v-for="item in listIbisokozo"
+                            :key="item.id"
+                            
+                            >
+                            <td>{{item.id}}</td>
+                            <td>{{item.igisokozo}}</td>
+                            <td>{{item.itariki}}</td>
+                        </tr> 
+                    </tbody>
                 </table>
             </div>
         </div>
@@ -86,11 +109,12 @@
 import ModalAddEmploye from "../components/dialog_add_employe.vue"
 import AddConge from "../components/dialog_add_conge.vue"
 import ModifierEmploye from "../components/modal_edit_employe.vue"
+import axios from "axios"
 export default {
-    mounted(){
-        console.log("Acces au composant ListeEmployes")
-    },
     components:{ModalAddEmploye,AddConge,ModifierEmploye},
+    mounted(){
+        this.getIbisokozo()
+    },
     data(){
         return{
             add_employe_shown:false,
@@ -98,6 +122,7 @@ export default {
             edit_employe_shown:false,
             retrieved_index:null,
             employeObj:{},
+            listIbisokozo:[],
             listeEmployes:[
                 {
                     id:1,
@@ -152,10 +177,39 @@ export default {
             this.listeEmployes[this.retrieved_index].conge_fin=fin
             this.close()
         },
+        enConge(employe){
+            let today = new Date()
+            let debut = new Date(employe.conge_debut)
+            let fin = new Date(employe.conge_fin)
+            return debut <= today && fin >= today
+        },
+        remainingDays(fin){
+            let today=new Date()
+            fin=new Date(fin)
+            return Math.ceil(((((fin-today)/1000)/3600)/24))
+        },
+        checkStatus(employe){
+            let today = new Date()
+            let debut = new Date(employe.conge_debut)
+            if(this.enConge(employe))
+                return "En congé"
+            if(debut>today)
+                return "Congé programmé en date du"+employe.conge_debut
+            return "Pas en congé"            
+        },
         modifierEmploye(employe, indice){
             this.retrieved_index=indice
             this.employeObj=employe
             this.edit_employe_shown=true
+        },
+        getIbisokozo(){
+            let url = "http://127.0.0.1:8000/rest_api/ibisokozo/"
+            axios.get(url)
+            .then((response)=>{
+                this.listIbisokozo=response.data
+            }).catch((error)=>{
+
+            })
         }
     }
 }
@@ -163,6 +217,6 @@ export default {
 
 <style scoped>
 .en_conge{
-    background-color:red;
+    background-color:orange;
 }
 </style>

@@ -8,6 +8,7 @@
           <label>Fin</label>
           <input type="date" v-model="date_fin" autofocus required />
       </div>
+      <p style="color:red;">{{msg}}</p>
       <div>
         <input
           class="btn btn-primary"
@@ -30,11 +31,26 @@ export default {
     return {
       date_debut:null,
       date_fin:null,
+      msg:""
     }
   },
   methods: {
+    checkDates(debut, fin){
+      debut = new Date(debut)
+      fin = new Date(fin)
+      if(debut>new Date() && debut<fin)
+        return true
+      else
+        return false
+    },
+    checkDiffDatesInDays(debut, fin){
+
+    },
     enregistrer() {
-      this.$emit("addCongeEmitted", this.date_debut, this.date_fin)
+      if(this.checkDates(this.date_debut, this.date_fin))
+        this.$emit("addCongeEmitted", this.date_debut, this.date_fin)
+      else
+        this.msg= "Veuillez choisir une intervalle de dates valide !"
     },
   },
 
