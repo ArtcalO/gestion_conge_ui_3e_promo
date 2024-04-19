@@ -54,11 +54,20 @@
     methods:{
         login(){
             let data = {
-                "username":this.username,
-                "password":this.password
+                "username": this.username,
+                "password": this.password
             }
-            this.$store.state.user = data
-            localStorage.setItem("user", JSON.stringify(data))
+            axios.post("/login", data)
+            .then((response)=>{
+              this.$store.state.user = response.data
+            })
+            .catch((error)=>{
+              console.log(error)
+            })
+            .finally(()=>{
+              console.log("Always executed")
+            })
+            // localStorage.setItem("user", JSON.stringify(data))
         }
     }
 

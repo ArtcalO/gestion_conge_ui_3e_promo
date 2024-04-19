@@ -24,7 +24,7 @@
 
         <div class="table-container">
             <div class="table-wrap-body">
-            <!--     <table class="table">
+                <table class="table">
                     <thead>
                         <tr>
                             <th>Nom</th>
@@ -73,27 +73,8 @@
                             </td>
                         </tr>
                     </tbody>
-                </table> -->
-                <table>
-                <thead>
-                        <tr>
-                            <th>Id</th>
-                            <th>Igisokozo</th>
-                            <th>Itariki</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr
-                            v-for="item in listIbisokozo"
-                            :key="item.id"
-                            
-                            >
-                            <td>{{item.id}}</td>
-                            <td>{{item.igisokozo}}</td>
-                            <td>{{item.itariki}}</td>
-                        </tr> 
-                    </tbody>
                 </table>
+               
             </div>
         </div>
         <ModalAddEmploye 
