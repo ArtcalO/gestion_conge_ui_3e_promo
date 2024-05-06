@@ -56,22 +56,12 @@ export default {
     mounted(){
         this.fetchPresences()
     },
-    computed:{
-        headers(){
-            return {
-                headers:{
-                "Authorization":"Bearer "+this.$store.state.user.access,
-                }
-            }
-        }
-    },
     methods:{
         getPersonneFullname(personne){
             return `${personne.nom} ${personne.prenom}`
         },
         fetchPresences(){
-            let header = `Bearer ${this.$store.state.user.access}`
-            console.log(header)
+            console.log(this.headers)
             axios.get("/presences/", this.headers)
             .then((response)=>{
                 this.presences = response.data.results

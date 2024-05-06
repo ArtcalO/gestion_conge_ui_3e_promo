@@ -1,7 +1,7 @@
 <template>
     <section class="wrapper">
         <div class="separator">
-            <!-- <div></div> -->
+            <div @click="$store.state.user=null">Logout</div>
             <strong>Liste des utilisateur</strong>
 
             <div class="interaction">
@@ -56,14 +56,21 @@ export default {
     mounted(){
         this.fetchSalaires()
     },
+    computed:{
+        headers(){
+            return {
+                headers:{
+                    "Authorization":"Bearer "+this.$store.state.user.access
+                }
+            }
+        }
+    }, 
     methods:{
         getPersonneFullname(personne){
             return `${personne.nom} ${personne.prenom}`
         },
         fetchSalaires(){
-            let header = `Bearer ${this.$store.state.user.access}`
-            console.log(header)
-            axios.get("/salaire/", {headers:{"Authorization":header}})
+            axios.get("/salaire/")
             .then((response)=>{
                 this.salaires = response.data.results
                 console.log(this.salaires)

@@ -62,6 +62,7 @@
               this.$store.state.user = response.data
             })
             .catch((error)=>{
+              alert(error.response.data.detail)
               console.log(error)
             })
             .finally(()=>{
