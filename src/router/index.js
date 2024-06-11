@@ -3,6 +3,7 @@ import ListeEmployes from "../views/ListeEmployes.vue"
 import ListeVoitures from "../views/ListeVoitures.vue"
 import SalairesView from '../views/SalairesView.vue'
 import PresencesView from '../views/PresencesView.vue'
+import CounterView from '@/views/CounterView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -26,6 +27,11 @@ const router = createRouter({
       path:"/presences",
       name:"listePresences",
       component:PresencesView
+    },
+    {
+      path:"/counter",
+      name:"counter",
+      component:CounterView
     }
   ]
 })

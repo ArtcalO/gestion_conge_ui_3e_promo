@@ -77,6 +77,7 @@
                
             </div>
         </div>
+        <button class="btn btn-add" @click="openAddCongeSimple" >Ajouter congé simple</button>
         <ModalAddEmploye 
             v-if="add_employe_shown"
             @close="close"
@@ -84,6 +85,7 @@
         ></ModalAddEmploye>
         <AddConge v-if="add_conge_shown" @close="close" @addCongeEmitted="addConge"/>
         <ModifierEmploye v-if="edit_employe_shown" @close="close" :employeProp="employeObj" />
+        <AddCongeSimple v-if="ädd_conge_simpple_shown" @ugara="ädd_conge_simpple_shown=false"/>
     </section>
 </template>
 <script>
@@ -91,14 +93,16 @@ import ModalAddEmploye from "../components/dialog_add_employe.vue"
 import AddConge from "../components/dialog_add_conge.vue"
 import ModifierEmploye from "../components/modal_edit_employe.vue"
 import axios from "axios"
+import AddCongeSimple from "@/components/add_conge.vue"
 export default {
-    components:{ModalAddEmploye,AddConge,ModifierEmploye},
+    components:{ModalAddEmploye,AddConge,ModifierEmploye,AddCongeSimple},
     mounted(){
         this.getIbisokozo()
     },
     data(){
         return{
             add_employe_shown:false,
+            ädd_conge_simpple_shown:false,
             add_conge_shown:false,
             edit_employe_shown:false,
             retrieved_index:null,
@@ -136,6 +140,9 @@ export default {
     methods:{
         openModal(){
             this.add_employe_shown=true
+        },
+        openAddCongeSimple(){
+            this.ädd_conge_simpple_shown=!this.ädd_conge_simpple_shown
         },
         close(){
             this.add_employe_shown=false
